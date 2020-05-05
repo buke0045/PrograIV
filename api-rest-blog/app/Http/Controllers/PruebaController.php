@@ -12,4 +12,6 @@ class PruebaController extends Controller
         $categorias = Category::all();
         return response()->json($categorias,200);
     }
+
+    //prueba
 }
