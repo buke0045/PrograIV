@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::resource('/api/customer', 'CustomerController');
+Route::get('/prueba','PruebaController@prueba');
+
+/*
 //especificas
 Route::post('/api/user/upload','UserController@upload');
 Route::get('/api/user/avatar/{filename}','UserController@avatar');
@@ -23,3 +27,4 @@ Route::get('/api/user/getidentity','UserController@getIdentity');
 Route::resource('/api/category', 'CategoryController',['except' => ['create','edit']]);
 Route::resource('/api/user', 'UserController',['except' => ['create','edit']]);
 Route::resource('/api/post','PostController',['except' => ['create','edit']]);
+*/
