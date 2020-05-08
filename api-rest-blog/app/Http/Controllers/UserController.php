@@ -24,7 +24,22 @@ class UserController extends Controller
         return response()->json($response,200);
     }
     public function show($id){ //GET
-
+        //Devolvera un elemento por su Id
+        $user=User::find($id);
+        if(is_object($user)){
+            $response=array(
+                'status'    =>'success',
+                'code'      =>200,
+                'data'   =>$user
+            );
+        }else{
+            $response=array(
+                'status'    =>'error',
+                'code'      =>404,
+                'message'   =>'Usuario no encontrado'
+            );
+        }
+        return response()->json($response,$response['code']);
     }
     public function store(Request $request){ //POST
 
