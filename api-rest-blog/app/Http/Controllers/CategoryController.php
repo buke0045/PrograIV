@@ -45,7 +45,7 @@ class CategoryController extends Controller
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
-                'name'=>'required|alpha'
+                'description'=>'required|alpha'
             ];
             $validate=\validator($data,$rules);
             if($validate->fails()){
@@ -57,7 +57,8 @@ class CategoryController extends Controller
                 );
             }else{
                 $category= new Category();
-                $category->name=$data['name'];
+                $category->description=$data['description'];
+                $category->block=$data['block'];
                 $category->save();
                 $response=array(
                     'status'=>'success',
