@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/api/customer', 'CustomerController');
-Route::get('/prueba','PruebaController@prueba');
+//Route::resource('/api/customer', 'CustomerController');
+//Route::get('/prueba','PruebaController@prueba');
 
 
 //especificas
@@ -27,3 +27,7 @@ Route::get('/api/user/getidentity','UserController@getIdentity');
 Route::resource('/api/category', 'CategoryController',['except' => ['create','edit']]);
 Route::resource('/api/user', 'UserController',['except' => ['create','edit']]);
 Route::resource('/api/post','PostController',['except' => ['create','edit']]);
+Route::resource('/api/customer','CustomerController');
+Route::resource('/api/product','ProductController');
+Route::resource('/api/supplier','SupplierController');
+Route::resource('/api/department','DepartmentController');

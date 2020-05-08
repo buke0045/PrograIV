@@ -42,7 +42,7 @@ class UserController extends Controller
         return response()->json($response,$response['code']);
     }
     public function store(Request $request){ //POST
-
+        
     }
     public function update(Request $request){ //PUT
 

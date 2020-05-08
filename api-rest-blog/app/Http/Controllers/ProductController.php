@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Customer;
-class CustomerController extends Controller
+use App\Product;
+class ProductController extends Controller
 {
     public function __construct(){
-        //middleware
+        //mcodedleware
     }
     public function index(){ //GET
         //Devolvera todos los elementos de categorias
-        $data=Customer::all();
+        $data=Product::all();
         $response=array(
             'status'=>'success',
             'code'=>200,
@@ -20,13 +20,13 @@ class CustomerController extends Controller
         return response()->json($response,200);
     }
     public function show($id){ //GET
-        //Devolvera un elemento por su Id
-        $customer=Customer::find($id);
-        if(is_object($customer)){
+        //Devolvera un elemento por su id
+        $product=Product::find($id);
+        if(is_object($product)){
             $response=array(
                 'status'    =>'success',
                 'code'      =>200,
-                'data'   =>$customer
+                'data'   =>$product
             );
         }else{
             $response=array(
@@ -44,7 +44,7 @@ class CustomerController extends Controller
 
 
     }
-    public function destroy($id){ //DELETE
+    public function destroy($code){ //DELETE
 
     }
 }

@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Customer;
-class CustomerController extends Controller
+use App\Supplier;
+class SupplierController extends Controller
 {
     public function __construct(){
         //middleware
     }
     public function index(){ //GET
         //Devolvera todos los elementos de categorias
-        $data=Customer::all();
+        $data=Supplier::all();
         $response=array(
             'status'=>'success',
             'code'=>200,
@@ -21,12 +21,12 @@ class CustomerController extends Controller
     }
     public function show($id){ //GET
         //Devolvera un elemento por su Id
-        $customer=Customer::find($id);
-        if(is_object($customer)){
+        $supplier=Supplier::find($id);
+        if(is_object($supplier)){
             $response=array(
                 'status'    =>'success',
                 'code'      =>200,
-                'data'   =>$customer
+                'data'   =>$supplier
             );
         }else{
             $response=array(
