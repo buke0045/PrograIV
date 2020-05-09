@@ -38,7 +38,49 @@ class SupplierController extends Controller
         return response()->json($response,$response['code']);
     }
     public function store(Request $request){ //POST
-
+        //Guardará un nuevo elemento
+        //JSON
+        //{"address":"San José","cellphone":"88888888","deliveryDays":"3","email":"razer@gmail.com","name":"Razer","phone":"26738888","supplierName":"Roberto"}
+        $json=$request->input('json',null);
+        $data = json_decode($json,true);
+        if(!empty($data)){
+            $data=array_map('trim',$data);
+            $rules=[
+                'name'=>'required|alpha'
+            ];
+            $validate=\validator($data,$rules);
+            if($validate->fails()){
+                $response=array(
+                    'status'=>'error',
+                    'code'=>406,
+                    'message'=>'los datos enviados son incorrectos',
+                    'errors'=>$validate->errors()
+                );
+            }else{
+                $supplier= new Supplier();
+                $supplier->address=$data['address'];
+                $supplier->cellphone=$data['cellphone'];
+                $supplier->deliveryDays=$data['deliveryDays'];
+                $supplier->email=$data['email'];
+                $supplier->name=$data['name'];
+                $supplier->phone=$data['phone'];
+                $supplier->supplierName=$data['supplierName'];
+                $supplier->save();
+                $response=array(
+                    'status'=>'success',
+                    'code'=>201,
+                    'message'=>'Datos almacenados satisfactoriamente'
+                );
+            }
+        }
+        else{
+            $response=array(
+                'status'=>'error',
+                'code'=>400,
+                'message'=>'faltan parametros'
+            );
+        }
+        return response()->json($response,$response['code']);
     }
     public function update(Request $request){ //PUT
 

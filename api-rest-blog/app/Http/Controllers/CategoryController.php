@@ -40,6 +40,8 @@ class CategoryController extends Controller
     }
     public function store(Request $request){ //POST
         //Guardará un nuevo elemento
+        //JSON
+        //{"block":"B", "description":"dessc"}
         $json=$request->input('json',null);
         $data = json_decode($json,true);
         if(!empty($data)){
