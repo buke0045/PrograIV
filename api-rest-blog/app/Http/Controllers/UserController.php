@@ -9,98 +9,9 @@ use App\Helpers\JwtAuth;
 
 class UserController extends Controller
 {
-
     public function __construct(){
         //middleware
-    }
-    public function index(){ //GET
-        //Devolvera todos los elementos de categorias
-        $data=User::all();
-        $response=array(
-            'status'=>'success',
-            'code'=>200,
-            'data'=>$data
-        );
-        return response()->json($response,200);
-    }
-    public function show($id){ //GET
-        //Devolvera un elemento por su Id
-        $user=User::find($id);
-        if(is_object($user)){
-            $response=array(
-                'status'    =>'success',
-                'code'      =>200,
-                'data'   =>$user
-            );
-        }else{
-            $response=array(
-                'status'    =>'error',
-                'code'      =>404,
-                'message'   =>'Usuario no encontrado'
-            );
-        }
-        return response()->json($response,$response['code']);
-    }
-    public function store(Request $request){ //POST
-        //Guardará un nuevo elemento
-        //JSON
-        //{"email":"asd@asd.com","gender":"hombre","name":"bukesaso","password":"pass","surname":"alvar","username":"bukss"}
-        $json=$request->input('json',null);
-        $data = json_decode($json,true);
-        if(!empty($data)){
-            $data=array_map('trim',$data);
-            $rules=[
-                'username'=>'required|unique:user',
-                'password'=>'required'
-            ];
-            $validate=\validator($data,$rules);
-            if($validate->fails()){
-                $response=array(
-                    'status'=>'error',
-                    'code'=>406,
-                    'message'=>'los datos enviados son incorrectos',
-                    'errors'=>$validate->errors()
-                );
-            }else{
-                $user= new User();
-                $user->email=$data['email'];
-                $user->gender=$data['gender'];
-                $user->name=$data['name'];
-                $user->password=$data['password'];
-                $user->surname=$data['surname'];
-                $user->username=$data['username'];
-                $user->save();
-                $response=array(
-                    'status'=>'success',
-                    'code'=>201,
-                    'message'=>'Datos almacenados satisfactoriamente'
-                );
-            }
-        }
-        else{
-            $response=array(
-                'status'=>'error',
-                'code'=>400,
-                'message'=>'faltan parametros'
-            );
-        }
-        return response()->json($response,$response['code']);
-    }
-    public function update(Request $request){ //PUT
-
-
-    }
-    public function destroy($id){ //DELETE
-
-    }
-
-
-
-/*
-    //      -----------------------------------------CODIGO DEL PROFE----------------------------------------------------------    
-    public function __construct(){
-        //middleware
-        $this->middleware('api.auth',['except'=>['index','show','login','avatar']]);
+        $this->middleware('api.auth',['except'=>['index','show','login','avatar','store']]);
     }
     public function index(){ //GET
         //Devolvera todos los elementos de categorias
@@ -137,9 +48,9 @@ class UserController extends Controller
         $data=array_map('trim',$data);
         $rules=[
             'name'=>'required|alpha',
-            'email'=>'required|email|unique:users',
+            'email'=>'required|email|unique:user',
             'password'=>'required',
-            'role'=>'required'
+            'username'=>'required'
         ];
         $valid= \validator($data,$rules);
         if($valid->fails()){
@@ -153,14 +64,14 @@ class UserController extends Controller
             $user =new User();
             $user->name=$data['name'];
             $user->last_name=$data['last_name'];
-            $user->role=$data['role'];
             $user->email=$data['email'];
+            $user->username=$data['username'];
             $user->password= hash('sha256', $data['password']);
             $user->save();
             $response=array(
                 'status'=>'success',
                 'code'=>200,
-                'message'=>'Datos almacenads satisfactoriamente'
+                'message'=>'Datos almacenados satisfactoriamente'
             );
         }
         return response()->json($response,$response['code']);
@@ -175,8 +86,9 @@ class UserController extends Controller
             $rules=[
                 'name'=>'required|alpha',
                 'last_name'=>'required',
-                'email'=>'required|email',
-                'role'=>'required'
+                'email'=>'required|email|unique:user',
+                'password'=>'required',
+                'username'=>'required'
             ];
             //validamos
             $validate = \validator($data, $rules);
@@ -268,7 +180,7 @@ class UserController extends Controller
         }
         else{
             $image_name=time().$image->getClientOriginalName();
-            \Storage::disk('users')->put($image_name,\File::get($image));
+            Storage::disk('user')->put($image_name,\File::get($image));
             $response=array(
                 'status'=>'success',
                 'code' => 200,
@@ -279,9 +191,9 @@ class UserController extends Controller
         return response()->json($response,$response['code']);
     }
     public function avatar($filename){
-        $exist=\Storage::disk('users')->exists($filename);
+        $exist=\Storage::disk('user')->exists($filename);
         if($exist){
-            $file=\Storage::disk('users')->get($filename);
+            $file=\Storage::disk('user')->get($filename);
             return new Response($file,200);
         }else{
             $response=array(
@@ -322,6 +234,4 @@ class UserController extends Controller
         }
         return response()->json($response);
     }
-
-    */
 }

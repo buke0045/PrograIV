@@ -16,7 +16,7 @@ Route::get('/api/user/getidentity','UserController@getIdentity');
 Route::resource('/api/category', 'CategoryController');
 Route::resource('/api/customer', 'CustomerController');
 Route::resource('/api/product','ProductController');
-Route::resource('/api/sale_product','SaleProductController');
+Route::resource('/api/sale_product','Sale_ProductController');
 Route::resource('/api/sale','SaleController');
 Route::resource('/api/supplier','SupplierController');
 Route::resource('/api/user', 'UserController',['except' => ['create','edit']]);
