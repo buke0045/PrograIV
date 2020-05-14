@@ -13,7 +13,7 @@ Route::post('/api/user/login','UserController@login');
 Route::get('/api/user/getidentity','UserController@getIdentity');
 //Route::get('/api/user/getidentity','UserController@getIdentity')->middleware(ApiAuthMiddleware::class);
 //automaticas RESTful
-Route::resource('/api/category', 'CategoryController',['except' => ['create','edit']]);
+Route::resource('/api/category', 'CategoryController');
 Route::resource('/api/customer', 'CustomerController');
 Route::resource('/api/product','ProductController');
 Route::resource('/api/sale_product','SaleProductController');
