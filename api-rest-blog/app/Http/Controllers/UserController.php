@@ -9,7 +9,95 @@ use App\Helpers\JwtAuth;
 
 class UserController extends Controller
 {
-    //
+
+    public function __construct(){
+        //middleware
+    }
+    public function index(){ //GET
+        //Devolvera todos los elementos de categorias
+        $data=User::all();
+        $response=array(
+            'status'=>'success',
+            'code'=>200,
+            'data'=>$data
+        );
+        return response()->json($response,200);
+    }
+    public function show($id){ //GET
+        //Devolvera un elemento por su Id
+        $user=User::find($id);
+        if(is_object($user)){
+            $response=array(
+                'status'    =>'success',
+                'code'      =>200,
+                'data'   =>$user
+            );
+        }else{
+            $response=array(
+                'status'    =>'error',
+                'code'      =>404,
+                'message'   =>'Usuario no encontrado'
+            );
+        }
+        return response()->json($response,$response['code']);
+    }
+    public function store(Request $request){ //POST
+        //Guardará un nuevo elemento
+        //JSON
+        //{"email":"asd@asd.com","gender":"hombre","name":"bukesaso","password":"pass","surname":"alvar","username":"bukss"}
+        $json=$request->input('json',null);
+        $data = json_decode($json,true);
+        if(!empty($data)){
+            $data=array_map('trim',$data);
+            $rules=[
+                'username'=>'required|unique:user',
+                'password'=>'required'
+            ];
+            $validate=\validator($data,$rules);
+            if($validate->fails()){
+                $response=array(
+                    'status'=>'error',
+                    'code'=>406,
+                    'message'=>'los datos enviados son incorrectos',
+                    'errors'=>$validate->errors()
+                );
+            }else{
+                $user= new User();
+                $user->email=$data['email'];
+                $user->gender=$data['gender'];
+                $user->name=$data['name'];
+                $user->password=$data['password'];
+                $user->surname=$data['surname'];
+                $user->username=$data['username'];
+                $user->save();
+                $response=array(
+                    'status'=>'success',
+                    'code'=>201,
+                    'message'=>'Datos almacenados satisfactoriamente'
+                );
+            }
+        }
+        else{
+            $response=array(
+                'status'=>'error',
+                'code'=>400,
+                'message'=>'faltan parametros'
+            );
+        }
+        return response()->json($response,$response['code']);
+    }
+    public function update(Request $request){ //PUT
+
+
+    }
+    public function destroy($id){ //DELETE
+
+    }
+
+
+
+/*
+    //      -----------------------------------------CODIGO DEL PROFE----------------------------------------------------------    
     public function __construct(){
         //middleware
         $this->middleware('api.auth',['except'=>['index','show','login','avatar']]);
@@ -234,4 +322,6 @@ class UserController extends Controller
         }
         return response()->json($response);
     }
+
+    */
 }

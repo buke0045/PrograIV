@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
+use App\Customer;
 use Illuminate\Http\Request;
 
 class PruebaController extends Controller
 {
-    //
     public function prueba(){
-        $categorias = Category::all();
-        return response()->json($categorias,200);
+        $customer = Customer::all();
+        return response()->json($customer,200);
     }
 
     //prueba

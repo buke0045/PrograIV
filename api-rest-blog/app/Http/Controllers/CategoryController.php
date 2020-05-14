@@ -40,12 +40,14 @@ class CategoryController extends Controller
     }
     public function store(Request $request){ //POST
         //Guardará un nuevo elemento
+        //JSON
+        //{"block":"B", "description":"dessc"}
         $json=$request->input('json',null);
         $data = json_decode($json,true);
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
-                'name'=>'required|alpha'
+                'description'=>'required|alpha'
             ];
             $validate=\validator($data,$rules);
             if($validate->fails()){
@@ -57,7 +59,8 @@ class CategoryController extends Controller
                 );
             }else{
                 $category= new Category();
-                $category->name=$data['name'];
+                $category->description=$data['description'];
+                $category->block=$data['block'];
                 $category->save();
                 $response=array(
                     'status'=>'success',
