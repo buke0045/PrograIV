@@ -2,17 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 //Route::resource('/api/customer', 'CustomerController');
 //Route::get('/prueba','PruebaController@prueba');
 
@@ -25,9 +14,9 @@ Route::get('/api/user/getidentity','UserController@getIdentity');
 //Route::get('/api/user/getidentity','UserController@getIdentity')->middleware(ApiAuthMiddleware::class);
 //automaticas RESTful
 Route::resource('/api/category', 'CategoryController',['except' => ['create','edit']]);
-Route::resource('/api/user', 'UserController',['except' => ['create','edit']]);
-Route::resource('/api/post','PostController',['except' => ['create','edit']]);
-Route::resource('/api/customer','CustomerController');
+Route::resource('/api/customer', 'CustomerController');
 Route::resource('/api/product','ProductController');
+Route::resource('/api/sale_product','SaleProductController');
+Route::resource('/api/sale','SaleController');
 Route::resource('/api/supplier','SupplierController');
-Route::resource('/api/department','DepartmentController');
+Route::resource('/api/user', 'UserController',['except' => ['create','edit']]);
