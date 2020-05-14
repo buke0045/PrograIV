@@ -166,28 +166,4 @@ class PostController extends Controller
         }
         return response()->json($response,$response['code']);
     }
-    public function upload(Request $request){
-        $image=$request->file('file0');
-        $validate=\Validator::make($request->all(),[
-            'file0'=>'required|image|mimes:jpg,png'
-        ]);
-        if(!$image || $validate->fails()){
-            $response=array(
-                'status'    =>'error',
-                'code'      =>406,
-                'message'   =>'Error al subir la imagen'
-            );
-        }
-        else{
-            $image_name=time().$image->getClientOriginalName();
-            \Storage::disk('post')->put($image_name,\File::get($image));
-            $response=array(
-                'status'    =>'success',
-                'code'      =>200,
-                'image' =>$image_name,
-                'message'   =>'Imagen cargada satisfactoriamente'
-            );
-        }
-        return response()->json($response,$response['code']);
-    }
 }
