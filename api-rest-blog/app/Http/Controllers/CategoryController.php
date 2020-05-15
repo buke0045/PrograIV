@@ -9,6 +9,7 @@ class CategoryController extends Controller
 {
     public function __construct(){
         //middleware
+        //$this->middleware('api.auth');
     }
     public function index(){ //GET
         //Devolvera todos los elementos de categorias
@@ -47,6 +48,7 @@ class CategoryController extends Controller
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
+                'name'=>'required|alpha',
                 'description'=>'required|alpha'
             ];
             $validate=\validator($data,$rules);
@@ -59,8 +61,8 @@ class CategoryController extends Controller
                 );
             }else{
                 $category= new Category();
+                $category->name=$data['name'];
                 $category->description=$data['description'];
-                $category->block=$data['block'];
                 $category->save();
                 $response=array(
                     'status'=>'success',
@@ -85,8 +87,8 @@ class CategoryController extends Controller
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
-                'id'=>'required',
-                'name'=>'required|alpha'
+                'name'=>'required',
+                'description'=>'required|alpha'
             ];
             $validate=\validator($data,$rules);
             if($validate->fails()){
@@ -100,6 +102,7 @@ class CategoryController extends Controller
             else{
                 $id=$data['id'];
                 unset($data['id']);
+                unset($data['name']);
                 unset($data['created_at']);
                 $updated=Category::where('id',$id)->update($data);
                 if($updated>0){
@@ -153,6 +156,5 @@ class CategoryController extends Controller
         }
         return response()->json($response,$response['code']);
     }
-
 
 }

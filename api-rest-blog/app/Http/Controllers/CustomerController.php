@@ -8,6 +8,7 @@ class CustomerController extends Controller
 {
     public function __construct(){
         //middleware
+        //$this->middleware('api.auth');
     }
     public function index(){ //GET
         //Devolvera todos los elementos de categorias
@@ -26,7 +27,7 @@ class CustomerController extends Controller
             $response=array(
                 'status'    =>'success',
                 'code'      =>200,
-                'data'   =>$customer
+                'data'      =>$customer
             );
         }else{
             $response=array(
@@ -46,7 +47,9 @@ class CustomerController extends Controller
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
-                'id'=>'required|unique:customer'
+                'name'=>'required|alpha',
+                'last_name'=>'required|alpha',
+                'email'=>'required|email'
             ];
             $validate=\validator($data,$rules);
             if($validate->fails()){
@@ -59,12 +62,11 @@ class CustomerController extends Controller
             }else{
                 $customer= new Customer();
                 $customer->id=$data['id'];
-                $customer->address=$data['address'];
-                $customer->email=$data['email'];
-                $customer->gender=$data['gender'];
-                $customer->last_name=$data['last_name'];
                 $customer->name=$data['name'];
+                $customer->last_name=$data['last_name'];
+                $customer->address=$data['address'];
                 $customer->phone=$data['phone'];
+                $customer->email=$data['email'];
                 $customer->save();
                 $response=array(
                     'status'=>'success',
@@ -83,10 +85,82 @@ class CustomerController extends Controller
         return response()->json($response,$response['code']);
     }
     public function update(Request $request){ //PUT
-
+        //Actualiza un elemento
+        $json= $request->input('json',null);
+        $data=json_decode($json,true);
+        if(!empty($data)){
+            $data=array_map('trim',$data);
+            $rules=[
+                'name'=>'required|alpha',
+                'last_name'=>'required|alpha',
+                'email'=>'required|email'
+            ];
+            $validate=\validator($data,$rules);
+            if($validate->fails()){
+                $response=array(
+                    'status'=>'error',
+                    'code'=>406,
+                    'message'=>'Los datos son incorrectos',
+                    'errors'=>$validate->errors()
+                );
+            }
+            else{
+                $id=$data['id'];
+                unset($data['id']);
+                unset($data['name']);
+                unset($data['last_name']);
+                unset($data['created_at']);
+                $updated=Customer::where('id',$id)->update($data);
+                if($updated>0){
+                    $response=array(
+                    'status'=>'success',
+                    'code'=>200,
+                    'message'=>'Datos actualizados satisfactoriamente'
+                    );
+                }else{
+                    $response=array(
+                        'status'=>'error',
+                        'code'=>400,
+                        'message'=>'Problemas en la actualización'
+                        );
+                }
+            }
+        }else{
+            $response=array(
+                'status'=>'error',
+                'code'=>400,
+                'message'=>'faltan parametros'
+            );
+        }
+        return response()->json($response,$response['code']);
 
     }
     public function destroy($id){ //DELETE
-
+        //Elimina un elemento
+        if(isset($id)){
+            $deleted=Customer::where('id',$id)->delete();
+            if($deleted){
+                $response=array(
+                    'status'=>'success',
+                    'code'=>200,
+                    'message'=>'Eliminado correctamente'
+                    );
+            }else{
+                $response=array(
+                    'status'=>'error',
+                    'code'=>400,
+                    'message'=>'No se pudo eliminar'
+                    );
+            }
+        }
+        else{
+            $response=array(
+                'status'=>'error',
+                'code'=>400,
+                'message'=>'Falta el identificador del recurso'
+                );
+        }
+        return response()->json($response,$response['code']);
     }
+
 }

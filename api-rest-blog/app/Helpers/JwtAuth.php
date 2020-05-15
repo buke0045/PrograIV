@@ -16,12 +16,12 @@ class JwtAuth{
         ])->first();
         if(is_object($user)){
             $token=array(
-                'sub'=>$user->id,
-                'email'=>$user->email,
+                'id'=>$user->id,
                 'name'=>$user->name,
                 'last_name'=>$user->last_name,
-                'role'=>$user->role,
-                'image'=>$user->image,
+                'email'=>$user->email,
+                'username'=>$user->username,
+                // Password no se muestra
                 'iat'=>time(),
                 'exp'=>time()+(1200)
             );

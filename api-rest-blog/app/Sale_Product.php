@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class SaleProduct extends Model
 {
     protected $table='sale_product';
-    public function user(){
+    public function sale(){
         return $this->belongsTo('App\Sale','idSale');
     }
-    public function category(){
+    public function product(){
         return $this->belongsTo('App\Category','idProduct');
     }
-
 }
