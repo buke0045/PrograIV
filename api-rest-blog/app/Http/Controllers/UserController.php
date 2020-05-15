@@ -11,6 +11,7 @@ class UserController extends Controller
 {
     public function __construct(){
         //middleware
+
         $this->middleware('api.auth',['except'=>['index','show','login','avatar','store']]);
     }
     public function index(){ //GET
@@ -180,7 +181,9 @@ class UserController extends Controller
         }
         else{
             $image_name=time().$image->getClientOriginalName();
-            Storage::disk('user')->put($image_name,\File::get($image));
+
+            \Storage::disk('user')->put($image_name,\File::get($image));
+
             $response=array(
                 'status'=>'success',
                 'code' => 200,
