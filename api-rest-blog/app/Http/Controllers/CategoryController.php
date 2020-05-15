@@ -102,6 +102,7 @@ class CategoryController extends Controller
             else{
                 $id=$data['id'];
                 unset($data['id']);
+                unset($data['name']);
                 unset($data['created_at']);
                 $updated=Category::where('id',$id)->update($data);
                 if($updated>0){

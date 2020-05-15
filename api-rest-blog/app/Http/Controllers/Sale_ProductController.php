@@ -11,7 +11,7 @@ class Sale_ProductController extends Controller
     }
 
     public function index(){
-        $data=Post::all()->load('sale','product');
+        $data=Post::all()->load('category','user');
         $response=array(
             'status'    =>'success',
             'code'      =>200,
@@ -20,7 +20,7 @@ class Sale_ProductController extends Controller
         return response()->json($response,$response['code']);
     }
     public function show($id){
-        $data=Post::find($id)->load('sale','user');
+        $data=Post::find($id)->load('category','user');
         if(is_object($data)){
             $response=array(
                 'status'    =>'success',
@@ -42,10 +42,10 @@ class Sale_ProductController extends Controller
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
-                'quantity'=>'required',
-//                'totalPrice'=>'required',
-                'idSale'=>'required',
-                'idProduct'=>'required'
+                'title'=>'required',
+                'content'=>'required',
+                'category_id'=>'required',
+                'image'=>'required'
             ];
             //validamos
             $validate = \validator($data, $rules);
@@ -61,13 +61,13 @@ class Sale_ProductController extends Controller
                 $token=$request->header('token',null);
                 $user=$jwtAuth->checkToken($token,true);
 
-                $saleProduct=new Sale_Product();
-                $saleProduct->idProduct=$product->sub;
-                $saleProduct->idSale=$data['idSale'];
-                $saleProduct->title=$data['title'];
-                $saleProduct->content=$data['content'];
-                $saleProduct->image=$data['image'];
-                $saleProduct->save();
+                $post=new Post();
+                $post->user_id=$user->sub;
+                $post->category_id=$data['category_id'];
+                $post->title=$data['title'];
+                $post->content=$data['content'];
+                $post->image=$data['image'];
+                $post->save();
 
                 $response=array(
                     'status'    =>'success',
@@ -161,5 +161,4 @@ class Sale_ProductController extends Controller
         }
         return response()->json($response,$response['code']);
     }
-
 }
