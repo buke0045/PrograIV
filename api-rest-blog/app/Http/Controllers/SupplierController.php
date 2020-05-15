@@ -46,7 +46,10 @@ class SupplierController extends Controller
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
-                'name'=>'required'
+                'name'=>'required',
+                'address'=>'required',
+                'email'=>'required',
+                'phone'=>'required'
             ];
             $validate=\validator($data,$rules);
             if($validate->fails()){
