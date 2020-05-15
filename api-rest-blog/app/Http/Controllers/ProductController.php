@@ -87,12 +87,13 @@ class ProductController extends Controller
     }
     public function update(Request $request){ //PUT
         //Actualiza un elemento
+        //{"id":"22","name":"M","description":"m","currentExist":"9","minExist":"9","price":"5000","image":"null","idSupplier":1,"idCategory":"1"}
         $json= $request->input('json',null);
         $data=json_decode($json,true);
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
-                'name'=>'required'
+                'id'=>'required'
             ];
             $validate=\validator($data,$rules);
             if($validate->fails()){
@@ -105,8 +106,8 @@ class ProductController extends Controller
             }
             else{
                 $id=$data['id'];
-                unset($data['id']);
-                unset($data['name']);
+                unset($data['idSupplier']);
+                unset($data['idCategory']);
                 unset($data['created_at']);
                 $updated=Product::where('id',$id)->update($data);
                 if($updated>0){
