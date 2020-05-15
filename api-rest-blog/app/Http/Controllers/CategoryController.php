@@ -42,7 +42,6 @@ class CategoryController extends Controller
     public function store(Request $request){ //POST
         //Guardará un nuevo elemento
         //JSON
-        //
         $json=$request->input('json',null);
         $data = json_decode($json,true);
         if(!empty($data)){
@@ -88,7 +87,7 @@ class CategoryController extends Controller
             $data=array_map('trim',$data);
             $rules=[
                 'name'=>'required',
-                'description'=>'required|alpha'
+                'description'=>'required'
             ];
             $validate=\validator($data,$rules);
             if($validate->fails()){
@@ -156,5 +155,4 @@ class CategoryController extends Controller
         }
         return response()->json($response,$response['code']);
     }
-
 }

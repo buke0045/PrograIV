@@ -47,8 +47,11 @@ class CustomerController extends Controller
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
+                'id'=>'required',
                 'name'=>'required|alpha',
                 'last_name'=>'required|alpha',
+                'address'=>'required',
+                'phone'=>'required|alpha',
                 'email'=>'required|email'
             ];
             $validate=\validator($data,$rules);
@@ -91,8 +94,11 @@ class CustomerController extends Controller
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
+                'id'=>'required',
                 'name'=>'required|alpha',
                 'last_name'=>'required|alpha',
+                'address'=>'required',
+                'phone'=>'required|alpha',
                 'email'=>'required|email'
             ];
             $validate=\validator($data,$rules);

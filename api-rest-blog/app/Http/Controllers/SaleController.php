@@ -93,6 +93,7 @@ public function __construct(){
             $rules=[
                 'iva'=>'required',
                 'totalPrice'=>'required',
+                'discount'=>'required',
                 'idCustomer'=>'required'
             ];
             $validate=\validator($data,$rules);

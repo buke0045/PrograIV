@@ -41,7 +41,7 @@ class ProductController extends Controller
     public function store(Request $request){ //POST
         //Guardará un nuevo elemento
         //JSON
-        //{"id":"22","name":"M","description":"m","currentExist":"5","minExist":"2","price":"5000","image":"null","created_at":"null","updated_at":"null","idSupplier":1,"idCategory":"1"}      
+        //{"id":"22","name":"M","description":"m","currentExist":"5","minExist":"2","price":"5000","image":"null","created_at":"null","updated_at":"null","idSupplier":1,"idCategory":"1"}
         $json=$request->input('json',null);
         $data = json_decode($json,true);
         if(!empty($data)){
@@ -53,6 +53,7 @@ class ProductController extends Controller
                 'minExist' => 'required',
                 'price' => 'required',
                 'image' => 'required',
+                'idSupplier' => 'required',
                 'idCategory' => 'required'
             ];
             $validate=\validator($data,$rules);
@@ -170,7 +171,7 @@ class ProductController extends Controller
     public function upload(Request $request){
         $image=$request->file('file0');
         $validate=\Validator::make($request->all(),[
-            'file0'=>'required|image|mimes:jpg,png'
+            'file0'=>'required|image|mimes:jpg,png,jpeg'
         ]);
         if(!$image || $validate->fails()){
             $response=array(

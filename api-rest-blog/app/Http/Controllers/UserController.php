@@ -48,10 +48,10 @@ class UserController extends Controller
         $data=array_map('trim',$data);
         $rules=[
             'name'=>'required|alpha',
-            'email'=>'required|email|unique:user',
             'last_name'=>'required',
-            'password'=>'required',
-            'username'=>'required'
+            'email'=>'required|email|unique:user',
+            'username'=>'required',
+            'password'=>'required'
         ];
         $valid= \validator($data,$rules);
         if($valid->fails()){
@@ -88,8 +88,8 @@ class UserController extends Controller
                 'name'=>'required|alpha',
                 'last_name'=>'required',
                 'email'=>'required|email|unique:user',
-                'password'=>'required',
-                'username'=>'required'
+                'username'=>'required',
+                'password'=>'required'
             ];
             //validamos
             $validate = \validator($data, $rules);
