@@ -6,11 +6,12 @@ use Illuminate\Http\Request;
 use App\Sale_Product;
 use App\Sale;
 use App\Product;
+use App\Helpers\JwtAuth;
 
 class Sale_ProductController extends Controller
 {
     public function __construct(){
-        //$this->middleware('api.auth',['except'=>['index','show']]);
+        //$this->middleware('api.auth',['except'=>['index','show','store']]);
     }
 
     public function index(){
@@ -59,13 +60,12 @@ class Sale_ProductController extends Controller
                     'errors'    => $validate->errors()
                 );
             }else{
+                /*
                 $jwtAuth=new JwtAuth();
                 $token=$request->header('token',null);
                 $user=$jwtAuth->checkToken($token,true);
-
+                */
                 $sale_product=new Sale_Product();
-//    $sale_product->user_id=$user->sub;
-                //$sale_product->id=$data['id'];
                 $sale_product->quantity=$data['quantity'];
                 $sale_product->totalPrice=$data['totalPrice'];
                 $sale_product->idSale=$data['idSale'];
@@ -93,11 +93,7 @@ class Sale_ProductController extends Controller
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
-                'id'=>'required',
-                'title'=>'required',
-                'content'=>'required',
-                'image'=>'required',
-                'idSale'=>'required'
+                'id'=>'required'
             ];
             //validamos
             $validate = \validator($data, $rules);
@@ -112,9 +108,10 @@ class Sale_ProductController extends Controller
             else{
                 $id=$data['id'];
                 unset($data['id']);
-                unset($data['user_id']);
                 unset($data['create_at']);
-                $updated=sale::where('id',$id)->update($data);
+                unset($data['idSale']);
+                unset($data['idProduct']);
+                $updated=Sale_Product::where('id',$id)->update($data);
                 if($updated>0){
                     $response=array(
                         'status'    =>'success',
