@@ -47,6 +47,7 @@ class Sale_ProductController extends Controller
             $data=array_map('trim',$data);
             $rules=[
                 'quantity'=>'required',
+                'totalPrice'=>'required',
                 'idSale'=>'required',
                 'idProduct'=>'required'
             ];
