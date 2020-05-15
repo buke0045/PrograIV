@@ -54,15 +54,9 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
-        'users' => [
+        'products' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/users'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-        ],
-        'posts' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/posts'),
+            'root' => storage_path('app/public/products'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],

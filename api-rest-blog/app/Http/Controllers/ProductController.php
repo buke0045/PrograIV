@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Product;
 use App\Supplier;
 use App\Category;
+use Illuminate\Http\Response;
 class ProductController extends Controller
 {
     public function __construct(){
@@ -47,7 +48,11 @@ class ProductController extends Controller
             $data=array_map('trim',$data);
             $rules=[
                 'name'=>'required',
-                'idSupplier' => 'required',
+                'description' => 'required',
+                'currentExist' => 'required',
+                'minExist' => 'required',
+                'price' => 'required',
+                'image' => 'required',
                 'idCategory' => 'required'
             ];
             $validate=\validator($data,$rules);
@@ -162,5 +167,45 @@ class ProductController extends Controller
         }
         return response()->json($response,$response['code']);
     }
+    public function upload(Request $request){
+        $image=$request->file('file0');
+        $validate=\Validator::make($request->all(),[
+            'file0'=>'required|image|mimes:jpg,png'
+        ]);
+        if(!$image || $validate->fails()){
+            $response=array(
+                'status'=>'error',
+                'code'=>406,
+                'message'=>'Error al subir la imagen',
+                'errors'=> $validate->errors()
+            );
+        }
+        else{
+            $image_name=time().$image->getClientOriginalName();
 
+            \Storage::disk('products')->put($image_name,\File::get($image));
+
+            $response=array(
+                'status'=>'success',
+                'code' => 200,
+                'message'=>'Imagen guardada exitosamente',
+                'image' => $image_name
+            );
+        }
+        return response()->json($response,$response['code']);
+    }
+    public function avatar($filename){
+        $exist=\Storage::disk('products')->exists($filename);
+        if($exist){
+            $file=\Storage::disk('products')->get($filename);
+            return new Response($file,200);
+        }else{
+            $response=array(
+                'status'=>'error',
+                'code'=>404,
+                'message'=>'Imagen no existe'
+            );
+            return response()->json($response,$response['code']);
+        }
+    }
 }

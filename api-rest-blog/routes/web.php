@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 //especificas
-Route::post('/api/user/upload','UserController@upload')->name('user.upload');
-Route::get('/api/user/avatar/{filename}','UserController@avatar')->name('user.avatar');
+Route::post('/api/product/upload','ProductController@upload')->name('product.upload');
+Route::get('/api/product/avatar/{filename}','ProductController@avatar')->name('product.avatar');
 Route::post('/api/user/login','UserController@login')->name('user.login');
 Route::get('/api/user/getidentity','UserController@getIdentity')->name('user.getIdentity');
 //Route::get('/api/user/getidentity','UserController@getIdentity')->middleware(ApiAuthMiddleware::class);

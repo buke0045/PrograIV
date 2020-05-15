@@ -8,7 +8,6 @@ use App\Sale;
 class SaleController extends Controller
 {
 public function __construct(){
-        //middleware
         //$this->middleware('api.auth');
     }
     public function index(){ //GET
@@ -50,6 +49,7 @@ public function __construct(){
             $rules=[
                 'iva'=>'required',
                 'totalPrice'=>'required',
+                'discount'=>'discount',
                 'idCustomer'=>'required'
                 ];
             $validate=\validator($data,$rules);

@@ -10,9 +10,7 @@ use App\Helpers\JwtAuth;
 class UserController extends Controller
 {
     public function __construct(){
-        //middleware
-
-        $this->middleware('api.auth',['except'=>['index','show','login','avatar','store']]);
+        $this->middleware('api.auth',['except'=>['index','show','login','avatar','store','upload']]);
     }
     public function index(){ //GET
         //Devolvera todos los elementos de categorias
@@ -51,6 +49,7 @@ class UserController extends Controller
         $rules=[
             'name'=>'required|alpha',
             'email'=>'required|email|unique:user',
+            'last_name'=>'required',
             'password'=>'required',
             'username'=>'required'
         ];
@@ -165,48 +164,6 @@ class UserController extends Controller
                 );
         }
         return response()->json($response,$response['code']);
-    }
-
-    public function upload(Request $request){
-        $image=$request->file('file0');
-        $validate=\Validator::make($request->all(),[
-            'file0'=>'required|image|mimes:jpg,png'
-        ]);
-        if(!$image || $validate->fails()){
-            $response=array(
-                'status'=>'error',
-                'code'=>406,
-                'message'=>'Error al subir la imagen',
-                'errors'=> $validate->errors()
-            );
-        }
-        else{
-            $image_name=time().$image->getClientOriginalName();
-
-            \Storage::disk('user')->put($image_name,\File::get($image));
-
-            $response=array(
-                'status'=>'success',
-                'code' => 200,
-                'message'=>'Imagen guardada exitosamente',
-                'image' => $image_name
-            );
-        }
-        return response()->json($response,$response['code']);
-    }
-    public function avatar($filename){
-        $exist=\Storage::disk('user')->exists($filename);
-        if($exist){
-            $file=\Storage::disk('user')->get($filename);
-            return new Response($file,200);
-        }else{
-            $response=array(
-                'status'=>'error',
-                'code'=>404,
-                'message'=>'Imagen no existe'
-            );
-            return response()->json($response,$response['code']);
-        }
     }
     public function getIdentity(Request $request){
         $jwtAuth= new JwtAuth();

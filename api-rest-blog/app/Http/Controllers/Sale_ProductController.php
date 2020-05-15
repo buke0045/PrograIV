@@ -11,7 +11,7 @@ use App\Helpers\JwtAuth;
 class Sale_ProductController extends Controller
 {
     public function __construct(){
-        //$this->middleware('api.auth',['except'=>['index','show','store']]);
+        $this->middleware('api.auth',['except'=>['index','show','store']]);
     }
 
     public function index(){
@@ -47,6 +47,7 @@ class Sale_ProductController extends Controller
             $data=array_map('trim',$data);
             $rules=[
                 'quantity'=>'required',
+                'totalPrice'=>'required',
                 'idSale'=>'required',
                 'idProduct'=>'required'
             ];
@@ -60,11 +61,11 @@ class Sale_ProductController extends Controller
                     'errors'    => $validate->errors()
                 );
             }else{
-                /*
+                
                 $jwtAuth=new JwtAuth();
                 $token=$request->header('token',null);
                 $user=$jwtAuth->checkToken($token,true);
-                */
+                
                 $sale_product=new Sale_Product();
                 $sale_product->quantity=$data['quantity'];
                 $sale_product->totalPrice=$data['totalPrice'];
