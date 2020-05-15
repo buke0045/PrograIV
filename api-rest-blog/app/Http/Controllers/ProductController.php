@@ -40,12 +40,13 @@ class ProductController extends Controller
     public function store(Request $request){ //POST
         //Guardará un nuevo elemento
         //JSON
-        //{"id":"22","name":"M","description":"m","currentExist":"5","minExist":"2","price":"5000","image":"null","created_at":"null","updated_at":"null","idSupplier":1,"idCategory":"1"}        $json=$request->input('json',null);
+        //{"id":"22","name":"M","description":"m","currentExist":"5","minExist":"2","price":"5000","image":"null","created_at":"null","updated_at":"null","idSupplier":1,"idCategory":"1"}      
+        $json=$request->input('json',null);
         $data = json_decode($json,true);
         if(!empty($data)){
             $data=array_map('trim',$data);
             $rules=[
-                'name'=>'required|alpha',
+                'name'=>'required',
                 'idSupplier' => 'required',
                 'idCategory' => 'required'
             ];
