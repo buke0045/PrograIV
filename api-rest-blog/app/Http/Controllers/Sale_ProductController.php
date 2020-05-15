@@ -65,7 +65,7 @@ class Sale_ProductController extends Controller
 
                 $sale_product=new Sale_Product();
 //    $sale_product->user_id=$user->sub;
-                $sale_product->id=$data['id'];
+                //$sale_product->id=$data['id'];
                 $sale_product->quantity=$data['quantity'];
                 $sale_product->totalPrice=$data['totalPrice'];
                 $sale_product->idSale=$data['idSale'];

@@ -44,6 +44,7 @@ class UserController extends Controller
     }
     public function store(Request $request){ //POST
         //Guardará un nuevo elemento
+        //{"name":"admin","last_name":"","email":"admin@gmail.com","username":"adminnnn", "password":"admin"}
         $json=$request->input('json',null);
         $data= json_decode($json,true);
         $data=array_map('trim',$data);
