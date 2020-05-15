@@ -59,12 +59,9 @@ class SupplierController extends Controller
             }else{
                 $supplier= new Supplier();
                 $supplier->address=$data['address'];
-                $supplier->cellphone=$data['cellphone'];
-                $supplier->deliveryDays=$data['deliveryDays'];
-                $supplier->email=$data['email'];
                 $supplier->name=$data['name'];
+                $supplier->email=$data['email'];
                 $supplier->phone=$data['phone'];
-                $supplier->supplierName=$data['supplierName'];
                 $supplier->save();
                 $response=array(
                     'status'=>'success',
@@ -83,10 +80,83 @@ class SupplierController extends Controller
         return response()->json($response,$response['code']);
     }
     public function update(Request $request){ //PUT
+        //Actualiza un elemento
+        $json = $request->input('json',null);
+        $data= json_decode($json,true);// el true es para pasar ese json a array
+        if(!empty($data)){
+            $data=array_map('trim',$data);
+            $rules=[
+                'name'=>'required'
+            ];
+            //validamos
+            $validate = \validator($data, $rules);
+            if($validate->fails()){
+                $response=array(
+                    'status'    =>'error',
+                    'code'      =>406,
+                    'message'   =>'Los datos enviados son incorrectos',
+                    'errors'    => $validate->errors()
+                );
+            }
+            else{
 
+                //capturamos el email en una variable
+                $name =$data['name'];
+                //quitamos los campos del arreglo,que no quiero que se modifiquen en la base de datos.
+                //esto en caso de que vengan dentro de los parametros.
+                unset($data['id']);
+                unset($data['create_at']);
 
+                //Buscamos y modificamos mediante ORM. Esto devuelve la cantidad de registros modificados. Cero si no se modificó
+                $updated=Supplier::where('name',$name)->update($data);
+                if($updated>0){
+                    $response=array(
+                        'status'    =>'success',
+                        'code'      =>200,
+                        'message'   =>'Actualizado correctamente'
+                    );
+                }else{
+                    $response=array(
+                        'status'    =>'error',
+                        'code'      =>400,
+                        'message'   =>'No se pudo actualizar, puede que el usuario no exita'
+                    );
+                }
+            }
+        }else{
+            $response=array(
+                'status'    =>'error',
+                'code'      =>400,
+                'message'   =>'Faltan parametros'
+            );
+        }
+        return response()->json($response,$response['code']);
     }
     public function destroy($id){ //DELETE
-
+        //Elimina un elemento
+        if(isset($id)){
+            $deleted=User::where('id',$id)->delete();
+            if($deleted){
+                $response=array(
+                    'status'=>'success',
+                    'code'=>200,
+                    'message'=>'Eliminado correctamente'
+                    );
+            }else{
+                $response=array(
+                    'status'=>'error',
+                    'code'=>400,
+                    'message'=>'No se pudo eliminar'
+                    );
+            }
+        }
+        else{
+            $response=array(
+                'status'=>'error',
+                'code'=>400,
+                'message'=>'Falta el identificador del recurso'
+                );
+        }
+        return response()->json($response,$response['code']);
     }
 }

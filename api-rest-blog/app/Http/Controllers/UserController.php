@@ -11,7 +11,8 @@ class UserController extends Controller
 {
     public function __construct(){
         //middleware
-        $this->middleware('api.auth',['except'=>['index','show','login','avatar','upload']]);
+
+        $this->middleware('api.auth',['except'=>['index','show','login','avatar','store']]);
     }
     public function index(){ //GET
         //Devolvera todos los elementos de categorias
@@ -71,7 +72,7 @@ class UserController extends Controller
             $response=array(
                 'status'=>'success',
                 'code'=>200,
-                'message'=>'Datos almacenads satisfactoriamente'
+                'message'=>'Datos almacenados satisfactoriamente'
             );
         }
         return response()->json($response,$response['code']);
@@ -180,7 +181,9 @@ class UserController extends Controller
         }
         else{
             $image_name=time().$image->getClientOriginalName();
+
             \Storage::disk('user')->put($image_name,\File::get($image));
+
             $response=array(
                 'status'=>'success',
                 'code' => 200,
